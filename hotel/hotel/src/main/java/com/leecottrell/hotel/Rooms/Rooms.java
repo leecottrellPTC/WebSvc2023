@@ -7,6 +7,8 @@ public class Rooms {
 
 
     public Rooms() {
+        this.roomNum=0;
+        this.guest="Not a valid room";
     }
 
     public Rooms(int roomNum, String guest) {
