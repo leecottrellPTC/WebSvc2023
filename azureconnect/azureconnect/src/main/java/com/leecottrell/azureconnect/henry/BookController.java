@@ -16,17 +16,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BookController {
+    private String connectionString="jdbc:sqlserver://cottrelldbserver.database.windows.net:1433;database=cottrellsql;user=studentLogin@cottrelldbserver;password=a,plain3;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+
     @RequestMapping(value="/Henry", method = RequestMethod.GET)
     public ResponseEntity<List<Book>>allBooks(){
         List response = new ArrayList<Book>();
         Book aBook = new Book();
         
-        String connectionString="jdbc:sqlserver://cottrelldbserver.database.windows.net:1433;database=cottrellsql;user=studentLogin@cottrelldbserver;password=a,plain3;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+        
 
         try{
             Connection con = DriverManager.getConnection(connectionString);
             Statement stmt = con.createStatement();
-            String SQL = "select * from book where title like 'Harry%' order by title";
+            String SQL = "select * from book order by title";
             ResultSet rs = stmt.executeQuery(SQL);
             while(rs.next()){
                 aBook = new Book();
@@ -47,5 +49,49 @@ public class BookController {
         }
         
         return new ResponseEntity(response, HttpStatus.OK);
+    }
+
+    @PostMapping(value="/Henry")
+    public ResponseEntity<String> postNewBook(@RequestBody Book newBook){
+        String response = newBook.getTitle() + " added";
+        String SQL="";
+        try{
+            Connection con = DriverManager.getConnection(connectionString);
+            Statement stmt = con.createStatement();
+            //verify and sanitize inputs here
+            SQL = String.format("insert into book values('%s', '%s', '%s','%s', '%s', '%s')",newBook.getBookCode(),
+                newBook.getTitle(),
+                newBook.getPublisherCode(),
+                newBook.getType(),
+                newBook.getPaperback(),
+                newBook.getImage());
+            stmt.execute(SQL);  
+        }
+        catch (Exception e){
+            response = e.getMessage() + " -- " + SQL;
+            return new ResponseEntity<String>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<String>(response, HttpStatus.OK);
+    }
+    @PutMapping(value="/Henry")
+    public ResponseEntity<String> updateRecord(@RequestBody PutClass data){
+        String response = data.getPrimaryKey() + " updated";
+        String SQL="";
+        try{
+            Connection con = DriverManager.getConnection(connectionString);
+            Statement stmt = con.createStatement();
+            //verify and sanitize inputs here
+            SQL = String.format("update book set %s = '%s' where bookCode = '%s'",
+                data.getFieldName(), data.getValue(), data.getPrimaryKey());
+            stmt.execute(SQL);  
+        }
+        catch (Exception e){
+            response = e.getMessage() + " -- " + SQL;
+            return new ResponseEntity<String>(response, HttpStatus.BAD_REQUEST);
+        }
+
+
+        return new ResponseEntity<String>(response, HttpStatus.OK);
     }
 }
