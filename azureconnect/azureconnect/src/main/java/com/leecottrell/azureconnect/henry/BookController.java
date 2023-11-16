@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BookController {
-    private String connectionString="jdbc:sqlserver://cottrelldbserver.database.windows.net:1433;database=cottrellsql;user=studentLogin@cottrelldbserver;password=;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+    private String connectionString="jdbc:sqlserver://cottrelldbserver.database.windows.net:1433;database=cottrellsql;user=studentLogin@cottrelldbserver;password=a,plain3;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
     @RequestMapping(value="/Henry", method = RequestMethod.GET)
     public ResponseEntity<List<Book>>allBooks(){
