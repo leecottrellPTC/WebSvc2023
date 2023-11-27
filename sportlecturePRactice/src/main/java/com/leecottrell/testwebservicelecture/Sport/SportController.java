@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SportController {
     @RequestMapping(value="/Sport", method=RequestMethod.GET)
-    public ResponseEntity<Sport> sportInfo(@RequestParam(defaultValue = "no name") String sportName){
+    public ResponseEntity<Sport> sportInfo(@RequestParam(defaultValue="No Sport") String sportName){
         Sport aSport = new Sport();
         //aSport.setTeamName("Riverhounds");
         
@@ -25,11 +25,6 @@ public class SportController {
             aSport.setSportName(sportName);
             aSport.setStadium("PPG Paints");
             aSport.setTeamName("Penguins");
-        }
-        else if(sportName.equalsIgnoreCase("football")){
-            aSport.setSportName(sportName);
-            aSport.setStadium("Acrisure Stadium");
-            aSport.setTeamName("Steelers");
         }
         else{
             aSport.setSportName(sportName);
